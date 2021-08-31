@@ -1,6 +1,8 @@
 package com.example.taskmaster;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,6 +12,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -17,7 +21,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ArrayList<Task> allTasks = new ArrayList<Task>();
+        allTasks.add(new Task("lab10","solve lab10 " ,"new"));
+        allTasks.add(new Task("lab18","solve lab18 " ,"assigned"));
+        allTasks.add(new Task("lab15","solve lab15 " ,"complete"));
+        allTasks.add(new Task("lab12","solve lab12 " ,"in progress"));
 
+               RecyclerView allTasksRecuclerView =findViewById(R.id.taskViewID);
+               allTasksRecuclerView.setLayoutManager(new LinearLayoutManager(this));
+               allTasksRecuclerView.setAdapter(new TaskAdabter(allTasks));
+
+
+
+
+        
 
 
         Button lab10=findViewById(R.id.task1);
