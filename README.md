@@ -1,13 +1,13 @@
 # taskmaster
 
-> Create a Task class. A Task should have a title, a body, and a state. The state should be one of “new”, “assigned”, “in progress”, or “complete”.
+> Add Task form to save the data entered in as a Task in local database.
 
-> Create a ViewAdapter class that displays data from a list of Tasks.
+> RecyclerView to display all Task entities in  database.
 
->In your MainActivity, create at least three hardcoded Task instances and use those to populate your RecyclerView/ViewAdapter.
+>Detail Page
 
 
 
 ## Image 
 
-![lab1](screenshots/lab3.png)
+![lab1](screenshots/lab4.png)

@@ -14,11 +14,15 @@ public class TaskDetail extends AppCompatActivity {
         setContentView(R.layout.activity_task_detail);
 
         Intent intent= getIntent();
-        String title=intent.getExtras().getString("titile");
-        String disc=intent.getExtras().getString("disc");
+        String title=intent.getExtras().getString("title");
+        String disc=intent.getExtras().getString("body");
+        String state=intent.getExtras().getString("state");
         TextView titlePage=findViewById(R.id.titileID);
         TextView discPage=findViewById(R.id.descriptionId);
+        TextView statePage=findViewById(R.id.stateDetailID);
+
         titlePage.setText(title);
         discPage.setText(disc);
+        statePage.setText(state);
     }
 }
