@@ -3,6 +3,8 @@ package com.example.taskmaster;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Database;
+import androidx.room.Room;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,23 +15,46 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
+     AppDatabase appDatabase; // object
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ArrayList<Task> allTasks = new ArrayList<Task>();
-        allTasks.add(new Task("lab10","solve lab10 " ,"new"));
-        allTasks.add(new Task("lab18","solve lab18 " ,"assigned"));
-        allTasks.add(new Task("lab15","solve lab15 " ,"complete"));
-        allTasks.add(new Task("lab12","solve lab12 " ,"in progress"));
+//        ArrayList<Task> allTasks = new ArrayList<Task>();
+//        allTasks.add(new Task("lab10","solve lab10 " ,"new"));
+//        allTasks.add(new Task("lab18","solve lab18 " ,"assigned"));
+//        allTasks.add(new Task("lab15","solve lab15 " ,"complete"));
+//        allTasks.add(new Task("lab12","solve lab12 " ,"in progress"));
 
-               RecyclerView allTasksRecuclerView =findViewById(R.id.taskViewID);
-               allTasksRecuclerView.setLayoutManager(new LinearLayoutManager(this));
-               allTasksRecuclerView.setAdapter(new TaskAdabter(allTasks));
+// Insert to database
+//        Task task1=new Task("lab20","solve lab18 " ,"assigned");
+//                appDatabase= Room.databaseBuilder(getApplicationContext(),AppDatabase.class,"osamaDatabase").allowMainThreadQueries().build();
+//
+//              TaskDao taskDao=appDatabase.taskDao();
+//
+//              taskDao.insertAll(task1);
+
+Button addTaskBtn=findViewById(R.id.addTaskBtn);
+addTaskBtn.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        Intent intent=new Intent(MainActivity.this,AddTask.class);
+        startActivity(intent);
+    }
+});
+
+              // to read from data base
+        appDatabase= Room.databaseBuilder(getApplicationContext(),AppDatabase.class,"osamaDatabase").allowMainThreadQueries().build();
+
+    List<Task> taskList = appDatabase.taskDao().getAll();
+
+    RecyclerView allTasksRecuclerView = findViewById(R.id.taskViewID);
+    allTasksRecuclerView.setLayoutManager(new LinearLayoutManager(this));
+    allTasksRecuclerView.setAdapter(new TaskAdabter(taskList));
 
 
 
