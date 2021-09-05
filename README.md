@@ -1,13 +1,13 @@
 # taskmaster
 
-> Add Task form to save the data entered in as a Task in local database.
+>  assert that important UI elements are displayed on the page
 
-> RecyclerView to display all Task entities in  database.
+>tap on a task, and assert that the resulting activity displays the name of that task
 
->Detail Page
+>edit the user’s username, and assert that it says the correct thing on the homepage
 
 
 
 ## Image 
 
-![lab1](screenshots/lab4.png)
+![lab1](screenshots/lab5.png)
