@@ -118,8 +118,8 @@ Button lab12=findViewById(R.id.task2);
     }
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
+    protected void onStart() {
+        super.onStart();
         String endName="'s tasks";
         SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         String name=sharedPreferences.getString("username","user");
