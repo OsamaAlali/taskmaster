@@ -5,9 +5,16 @@ import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.amplifyframework.AmplifyException;
+import com.amplifyframework.api.aws.AWSApiPlugin;
+import com.amplifyframework.api.graphql.model.ModelMutation;
+import com.amplifyframework.core.Amplify;
+import com.amplifyframework.datastore.generated.model.Todo;
 
 public class AddTask extends AppCompatActivity {
 
@@ -28,13 +35,34 @@ public class AddTask extends AppCompatActivity {
 
                 EditText statecGet=findViewById(R.id.stateId);
                 String state=statecGet.getText().toString();
+////        inset into database
 
-                Task task1=new Task(title,disc,state);
-                appDatabase= Room.databaseBuilder(getApplicationContext(),AppDatabase.class,"osamaDatabase").allowMainThreadQueries().build();
+//                Task task1=new Task(title,disc,state);
 
-                TaskDao taskDao=appDatabase.taskDao();
 
-                taskDao.insertAll(task1);
+
+
+                    Todo todo = Todo.builder()
+                            .title(title)
+                            .body(disc)
+                            .state(state)
+                            .build();
+
+                    Amplify.API.mutate(
+                            ModelMutation.create(todo),
+                            response -> Log.i("MyAmplifyApp", "Added Todo with id: " + response.getData().getId()),
+                            error -> Log.e("MyAmplifyApp", "Create failed", error)
+                    );
+
+
+
+
+
+//                appDatabase= Room.databaseBuilder(getApplicationContext(),AppDatabase.class,"osamaDatabase").allowMainThreadQueries().build();
+//
+//                TaskDao taskDao=appDatabase.taskDao();
+//
+//                taskDao.insertAll(task1);
 
 
             }

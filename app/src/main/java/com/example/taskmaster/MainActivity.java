@@ -1,5 +1,6 @@
 package com.example.taskmaster;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,36 +10,78 @@ import androidx.room.Room;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.amplifyframework.AmplifyException;
+import com.amplifyframework.api.aws.AWSApiPlugin;
+import com.amplifyframework.api.graphql.model.ModelQuery;
+import com.amplifyframework.core.Amplify;
+import com.amplifyframework.datastore.generated.model.Todo;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
      AppDatabase appDatabase; // object
+//    RecyclerView allTasksRecuclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        ArrayList<Task> allTasks = new ArrayList<Task>();
-//        allTasks.add(new Task("lab10","solve lab10 " ,"new"));
-//        allTasks.add(new Task("lab18","solve lab18 " ,"assigned"));
-//        allTasks.add(new Task("lab15","solve lab15 " ,"complete"));
-//        allTasks.add(new Task("lab12","solve lab12 " ,"in progress"));
+        try {
+            // Add these lines to add the AWSApiPlugin plugins
+            Amplify.addPlugin(new AWSApiPlugin());
+            Amplify.configure(getApplicationContext());
 
-// Insert to database
-//        Task task1=new Task("lab20","solve lab18 " ,"assigned");
-//                appDatabase= Room.databaseBuilder(getApplicationContext(),AppDatabase.class,"osamaDatabase").allowMainThreadQueries().build();
-//
-//              TaskDao taskDao=appDatabase.taskDao();
-//
-//              taskDao.insertAll(task1);
+            Log.i("MyAmplifyApp", "Initialized Amplify");
+        } catch (AmplifyException error) {
+            Log.e("MyAmplifyApp", "Could not initialize Amplify", error);
+        }
+        RecyclerView   allTasksRecuclerView = findViewById(R.id.taskViewID);
+        Handler handler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message msg) {
+                allTasksRecuclerView.getAdapter().notifyDataSetChanged();
+                return false;
+            }
+        });
+        List<Todo> taskList =new ArrayList<>();
 
-Button addTaskBtn=findViewById(R.id.addTaskBtn);
+            Amplify.API.query(
+                    ModelQuery.list(Todo.class),
+                    response -> {
+                        for (Todo task : response.getData()) {
+                            Log.i("MyAmplifyApp", task.getTitle());
+                            Log.i("MyAmplifyApp", task.getBody());
+                            Log.i("MyAmplifyApp", task.getState());
+                            taskList.add(task);
+                        }
+                        handler.sendEmptyMessage(1);
+                    },
+                    error -> Log.e("MyAmplifyApp", "Query failure", error)
+            );
+
+
+//
+
+
+
+        allTasksRecuclerView.setLayoutManager(new LinearLayoutManager(this));
+        allTasksRecuclerView.setAdapter(new TaskAdabter(taskList));
+
+
+
+
+
+        Button addTaskBtn=findViewById(R.id.addTaskBtn);
 addTaskBtn.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
@@ -48,13 +91,15 @@ addTaskBtn.setOnClickListener(new View.OnClickListener() {
 });
 
               // to read from data base
-        appDatabase= Room.databaseBuilder(getApplicationContext(),AppDatabase.class,"osamaDatabase").allowMainThreadQueries().build();
 
-    List<Task> taskList = appDatabase.taskDao().getAll();
 
-    RecyclerView allTasksRecuclerView = findViewById(R.id.taskViewID);
-    allTasksRecuclerView.setLayoutManager(new LinearLayoutManager(this));
-    allTasksRecuclerView.setAdapter(new TaskAdabter(taskList));
+
+
+
+//        appDatabase= Room.databaseBuilder(getApplicationContext(),AppDatabase.class,"osamaDatabase").allowMainThreadQueries().build();
+
+//    List<Task> taskList = appDatabase.taskDao().getAll();
+
 
 
 
@@ -113,6 +158,14 @@ Button lab12=findViewById(R.id.task2);
          startActivity(goSettingsPage);
      }
  });
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
 
 
     }

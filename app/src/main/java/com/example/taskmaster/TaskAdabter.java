@@ -9,19 +9,21 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.amplifyframework.datastore.generated.model.Todo;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class TaskAdabter extends RecyclerView.Adapter<TaskAdabter.TaskViewHolder>{
 
-    List<Task> allTasks=new ArrayList<Task>();
+    List<Todo> allTasks=new ArrayList<>();
 
-    public TaskAdabter(List<Task> allTasks) {
+    public TaskAdabter(List<Todo> allTasks) {
         this.allTasks = allTasks;
     }
 
     public static  class  TaskViewHolder extends RecyclerView.ViewHolder{
-        public Task task;
+        public Todo task;
 
         View itemView;
 
@@ -33,9 +35,9 @@ public class TaskAdabter extends RecyclerView.Adapter<TaskAdabter.TaskViewHolder
                 @Override
                 public void onClick(View v) {
                     Intent goDetail= new Intent(v.getContext(),TaskDetail.class);
-                    goDetail.putExtra("title",task.title);
-                    goDetail.putExtra("body",task.body);
-                    goDetail.putExtra("state",task.state);
+                    goDetail.putExtra("title",task.getTitle());
+                    goDetail.putExtra("body",task.getBody());
+                    goDetail.putExtra("state",task.getState());
 
                     v.getContext().startActivity(goDetail);
 
@@ -63,9 +65,9 @@ public class TaskAdabter extends RecyclerView.Adapter<TaskAdabter.TaskViewHolder
         TextView body = holder.itemView.findViewById(R.id.bodyFragment);
         TextView state = holder.itemView.findViewById(R.id.stateFragment);
 
-        title.setText(holder.task.title);
-        body.setText(holder.task.body);
-        state.setText(holder.task.state);
+        title.setText(holder.task.getTitle());
+        body.setText(holder.task.getBody());
+        state.setText(holder.task.getState());
 
     }
 
