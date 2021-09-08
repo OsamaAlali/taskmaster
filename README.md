@@ -1,13 +1,9 @@
 # taskmaster
 
->  assert that important UI elements are displayed on the page
+>   Add Task has been Modify form to save the data entered in as a Task to DynamoDB.
 
->tap on a task, and assert that the resulting activity displays the name of that task
-
->edit the user’s username, and assert that it says the correct thing on the homepage
-
-
+>homepage’s RecyclerView to display all Task entities in DynamoDB.
 
 ## Image 
 
-![lab1](screenshots/lab5.png)
+![lab1](screenshots/lab6.png)
