@@ -1,8 +1,8 @@
 # taskmaster
 
->   Add Task has been Modify form to save the data entered in as a Task to DynamoDB.
+>   Create a second entity for a team, which has a name and a list of tasks. Update your tasks to be owned by a team.
 
->homepage’s RecyclerView to display all Task entities in DynamoDB.
+Manually create three teams by running a mutation exactly three times in your code. (You do NOT need to allow the user to create new teams.)
 
 ## Image 
 
