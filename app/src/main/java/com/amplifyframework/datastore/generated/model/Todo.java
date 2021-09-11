@@ -1,5 +1,6 @@
 package com.amplifyframework.datastore.generated.model;
 
+import com.amplifyframework.core.model.annotations.BelongsTo;
 import com.amplifyframework.core.model.temporal.Temporal;
 
 import java.util.List;
@@ -24,10 +25,12 @@ public final class Todo implements Model {
   public static final QueryField TITLE = field("Todo", "title");
   public static final QueryField BODY = field("Todo", "body");
   public static final QueryField STATE = field("Todo", "state");
+  public static final QueryField TASK_TEAM = field("Todo", "todoTaskTeamId");
   private final @ModelField(targetType="ID", isRequired = true) String id;
   private final @ModelField(targetType="String", isRequired = true) String title;
   private final @ModelField(targetType="String") String body;
   private final @ModelField(targetType="String") String state;
+  private final @ModelField(targetType="Team") @BelongsTo(targetName = "todoTaskTeamId", type = Team.class) Team taskTeam;
   private @ModelField(targetType="AWSDateTime", isReadOnly = true) Temporal.DateTime createdAt;
   private @ModelField(targetType="AWSDateTime", isReadOnly = true) Temporal.DateTime updatedAt;
   public String getId() {
@@ -46,6 +49,10 @@ public final class Todo implements Model {
       return state;
   }
   
+  public Team getTaskTeam() {
+      return taskTeam;
+  }
+  
   public Temporal.DateTime getCreatedAt() {
       return createdAt;
   }
@@ -54,11 +61,12 @@ public final class Todo implements Model {
       return updatedAt;
   }
   
-  private Todo(String id, String title, String body, String state) {
+  private Todo(String id, String title, String body, String state, Team taskTeam) {
     this.id = id;
     this.title = title;
     this.body = body;
     this.state = state;
+    this.taskTeam = taskTeam;
   }
   
   @Override
@@ -73,6 +81,7 @@ public final class Todo implements Model {
               ObjectsCompat.equals(getTitle(), todo.getTitle()) &&
               ObjectsCompat.equals(getBody(), todo.getBody()) &&
               ObjectsCompat.equals(getState(), todo.getState()) &&
+              ObjectsCompat.equals(getTaskTeam(), todo.getTaskTeam()) &&
               ObjectsCompat.equals(getCreatedAt(), todo.getCreatedAt()) &&
               ObjectsCompat.equals(getUpdatedAt(), todo.getUpdatedAt());
       }
@@ -85,6 +94,7 @@ public final class Todo implements Model {
       .append(getTitle())
       .append(getBody())
       .append(getState())
+      .append(getTaskTeam())
       .append(getCreatedAt())
       .append(getUpdatedAt())
       .toString()
@@ -99,6 +109,7 @@ public final class Todo implements Model {
       .append("title=" + String.valueOf(getTitle()) + ", ")
       .append("body=" + String.valueOf(getBody()) + ", ")
       .append("state=" + String.valueOf(getState()) + ", ")
+      .append("taskTeam=" + String.valueOf(getTaskTeam()) + ", ")
       .append("createdAt=" + String.valueOf(getCreatedAt()) + ", ")
       .append("updatedAt=" + String.valueOf(getUpdatedAt()))
       .append("}")
@@ -132,6 +143,7 @@ public final class Todo implements Model {
       id,
       null,
       null,
+      null,
       null
     );
   }
@@ -140,7 +152,8 @@ public final class Todo implements Model {
     return new CopyOfBuilder(id,
       title,
       body,
-      state);
+      state,
+      taskTeam);
   }
   public interface TitleStep {
     BuildStep title(String title);
@@ -152,6 +165,7 @@ public final class Todo implements Model {
     BuildStep id(String id) throws IllegalArgumentException;
     BuildStep body(String body);
     BuildStep state(String state);
+    BuildStep taskTeam(Team taskTeam);
   }
   
 
@@ -160,6 +174,7 @@ public final class Todo implements Model {
     private String title;
     private String body;
     private String state;
+    private Team taskTeam;
     @Override
      public Todo build() {
         String id = this.id != null ? this.id : UUID.randomUUID().toString();
@@ -168,7 +183,8 @@ public final class Todo implements Model {
           id,
           title,
           body,
-          state);
+          state,
+          taskTeam);
     }
     
     @Override
@@ -190,6 +206,12 @@ public final class Todo implements Model {
         return this;
     }
     
+    @Override
+     public BuildStep taskTeam(Team taskTeam) {
+        this.taskTeam = taskTeam;
+        return this;
+    }
+    
     /** 
      * @param id id
      * @return Current Builder instance, for fluent method chaining
@@ -202,11 +224,12 @@ public final class Todo implements Model {
   
 
   public final class CopyOfBuilder extends Builder {
-    private CopyOfBuilder(String id, String title, String body, String state) {
+    private CopyOfBuilder(String id, String title, String body, String state, Team taskTeam) {
       super.id(id);
       super.title(title)
         .body(body)
-        .state(state);
+        .state(state)
+        .taskTeam(taskTeam);
     }
     
     @Override
@@ -222,6 +245,11 @@ public final class Todo implements Model {
     @Override
      public CopyOfBuilder state(String state) {
       return (CopyOfBuilder) super.state(state);
+    }
+    
+    @Override
+     public CopyOfBuilder taskTeam(Team taskTeam) {
+      return (CopyOfBuilder) super.taskTeam(taskTeam);
     }
   }
   
