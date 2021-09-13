@@ -42,13 +42,13 @@ public class AddTask extends AppCompatActivity {
         String state=statecGet.getText().toString();
 
 
-        try {
-            Amplify.addPlugin(new AWSApiPlugin());
-            Amplify.configure(getApplicationContext());
-            Log.i("MyAmplifyApp", "Initialized Amplify");
-        } catch (AmplifyException error) {
-            Log.e("MyAmplifyApp", "Could not initialize Amplify", error);
-        }
+//        try {
+//            Amplify.addPlugin(new AWSApiPlugin());
+//            Amplify.configure(getApplicationContext());
+//            Log.i("MyAmplifyApp", "Initialized Amplify");
+//        } catch (AmplifyException error) {
+//            Log.e("MyAmplifyApp", "Could not initialize Amplify", error);
+//        }
 
         Map< String,String> teamsList = new HashMap<>();
         Amplify.API.query(
@@ -77,9 +77,10 @@ public class AddTask extends AppCompatActivity {
                             Log.i("MyAmplifyApp", ((Team) response.getData()).getName());
 
                            Todo todo = Todo.builder()
-                                    .title(title)
-                                    .body(disc)
-                                    .state(state)
+                                    .title(titleGet.getText().toString())
+                                    .body(discGet.getText().toString())
+                                    .state(statecGet.getText().toString())
+                                   .taskTeam(response.getData())
                                     .build();
 
                             Amplify.API.mutate(
@@ -91,38 +92,20 @@ public class AddTask extends AppCompatActivity {
                         error -> Log.e("MyAmplifyApp", error.toString(), error)
                 );
 
-
-////        inset into database
-//                Task task1=new Task(title,disc,state);
-//                    Todo todo = Todo.builder()
-//                            .title(title)
-//                            .body(disc)
-//                            .state(state)
-//                            .build();
-//                    Amplify.API.mutate(
-//                            ModelMutation.create(todo),
-//                            response -> Log.i("MyAmplifyApp", "Added Todo with id: " + response.getData().getId()),
-//                            error -> Log.e("MyAmplifyApp", "Create failed", error)
-//                    );
-
-//                appDatabase= Room.databaseBuilder(getApplicationContext(),AppDatabase.class,"osamaDatabase").allowMainThreadQueries().build();
-//
-//                TaskDao taskDao=appDatabase.taskDao();
-//
-//                taskDao.insertAll(task1);
-
-            }
-        });
-
-        Button backMain=findViewById(R.id.backToMain);
-        backMain.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent goMain=new Intent(AddTask.this,MainActivity.class);
+               Intent goMain=new Intent(AddTask.this,MainActivity.class);
                 startActivity(goMain);
-
             }
         });
+
+//        Button backMain=findViewById(R.id.backToMain);
+//        backMain.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent goMain=new Intent(AddTask.this,MainActivity.class);
+//                startActivity(goMain);
+//
+//            }
+//        });
     }
 
 }
