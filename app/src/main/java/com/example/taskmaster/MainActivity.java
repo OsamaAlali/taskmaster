@@ -42,12 +42,10 @@ public class MainActivity extends AppCompatActivity {
             // Add these lines to add the AWSApiPlugin plugins
             Amplify.addPlugin(new AWSApiPlugin());
             Amplify.configure(getApplicationContext());
-
             Log.i("MyAmplifyApp", "Initialized Amplify");
         } catch (AmplifyException error) {
             Log.e("MyAmplifyApp", "Could not initialize Amplify", error);
         }
-
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         String teamId = sharedPreferences.getString("teamId", "");
 
@@ -70,8 +68,6 @@ public class MainActivity extends AppCompatActivity {
 //                response -> Log.i("MyAmplifyApp", "Added Todo with id: " + response.getData().getId()),
 //                error -> Log.e("MyAmplifyApp", "Create failed", error)
 //        );
-//
-//
 //        appDatabase = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "osaDatabase").allowMainThreadQueries().build();
         if (!teamId.equals("")) {
             RecyclerView allTasksRecuclerView = findViewById(R.id.taskViewID);
@@ -83,10 +79,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
             List<Todo> taskList = new ArrayList<>();
-
             Amplify.API.query(
                     ModelQuery.get(Team.class ,teamId),
                     response -> {
+                        if(response.getData() != null)
                         for (Todo task : response.getData().getTodo()) {
                             Log.i("MyAmplifyApp", task.getTitle());
                             Log.i("MyAmplifyApp", task.getBody());
@@ -97,20 +93,10 @@ public class MainActivity extends AppCompatActivity {
                     },
                     error -> Log.e("MyAmplifyApp", "Query failure", error)
             );
-
             allTasksRecuclerView.setLayoutManager(new LinearLayoutManager(this));
             allTasksRecuclerView.setAdapter(new TaskAdabter(taskList));
         }
 //
-
-
-
-
-
-
-
-
-
         Button addTaskBtn=findViewById(R.id.addTaskBtn);
 addTaskBtn.setOnClickListener(new View.OnClickListener() {
     @Override
@@ -121,21 +107,9 @@ addTaskBtn.setOnClickListener(new View.OnClickListener() {
 });
 
               // to read from data base
-
-
-
-
-
 //        appDatabase= Room.databaseBuilder(getApplicationContext(),AppDatabase.class,"osamaDatabase").allowMainThreadQueries().build();
 
 //    List<Task> taskList = appDatabase.taskDao().getAll();
-
-
-
-
-
-        
-
 
         Button lab10=findViewById(R.id.task1);
 
@@ -203,10 +177,11 @@ Button lab12=findViewById(R.id.task2);
     @Override
     protected void onStart() {
         super.onStart();
-        String endName="'s tasks";
+        String endName="'s tasks Team: ";
         SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         String name=sharedPreferences.getString("username","user");
+        String chooseTeamName= sharedPreferences.getString("teamName", "No team");
         TextView viewName=findViewById(R.id.userNameHomeId);
-        viewName.setText(name+endName);
+        viewName.setText(name+endName+chooseTeamName);
     }
 }
