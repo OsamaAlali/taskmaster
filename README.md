@@ -6,4 +6,4 @@ Manually create three teams by running a mutation exactly three times in your co
 
 ## Image 
 
-![lab1](screenshots/lab6.png)
+![lab1](screenshots/lab33.png)
