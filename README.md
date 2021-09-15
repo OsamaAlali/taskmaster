@@ -1,9 +1,10 @@
 # taskmaster
 
->   Create a second entity for a team, which has a name and a list of tasks. Update your tasks to be owned by a team.
+>   Add Cognito to your Amplify setup. Add in user login and sign up flows to your application, using Cognito’s pre-built UI as appropriate. Display the logged in user’s username somewhere relevant in your app.
 
-Manually create three teams by running a mutation exactly three times in your code. (You do NOT need to allow the user to create new teams.)
+Allow users to log out of your application.
+
 
 ## Image 
 
-![lab1](screenshots/lab33.png)
+![lab1](screenshots/lab34.png)
