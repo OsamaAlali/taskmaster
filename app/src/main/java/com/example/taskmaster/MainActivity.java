@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
      AppDatabase appDatabase; // object
 //    RecyclerView allTasksRecuclerView;
 
+
     public static final String TAG = MainActivity.class.getSimpleName();
 
     private static PinpointManager pinpointManager;
@@ -101,12 +102,11 @@ public class MainActivity extends AppCompatActivity {
             Amplify.addPlugin(new AWSApiPlugin());
             Amplify.addPlugin(new AWSCognitoAuthPlugin());
             Amplify.configure(getApplicationContext());
+            getPinpointManager(getApplicationContext());
             Log.i("MyAmplifyApp", "Initialized Amplify");
         } catch (AmplifyException error) {
             Log.e("MyAmplifyApp", "Could not initialize Amplify", error);
         }
-
-
 
         Amplify.Auth.signInWithWebUI(
                 MainActivity.this,
@@ -114,20 +114,24 @@ public class MainActivity extends AppCompatActivity {
                 error -> Log.e("AuthQuickStart", error.toString())
         );
 
+
+
+
         Button logOutBtn=findViewById(R.id.logOutBtn);
         logOutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Amplify.Auth.signOut(
                         AuthSignOutOptions.builder().globalSignOut(true).build(),
                         () -> {
+
                             Log.i("AuthQuickstart", "Signed out globally");
-                            finish();
-                            startActivity(getIntent());
+//                            finish();
+//                            startActivity(getIntent());
                         },
                         error -> Log.e("AuthQuickstart", error.toString())
                 );
-
 
             }
         });
@@ -204,48 +208,7 @@ addTaskBtn.setOnClickListener(new View.OnClickListener() {
 
 //    List<Task> taskList = appDatabase.taskDao().getAll();
 
-        Button lab10=findViewById(R.id.task1);
 
-        lab10.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String title="Solve lab10";
-                String disc="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries," +
-                        " but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised";
-                Intent goTaskDetail=new Intent(MainActivity.this,TaskDetail.class);
-                goTaskDetail.putExtra("titile",title);
-                goTaskDetail.putExtra("disc",disc);
-                startActivity(goTaskDetail);
-            }});
-
-Button lab12=findViewById(R.id.task2);
- lab12.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        String title="Solve lab12 Sort";
-        String disc="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries," +
-                " but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised";
-        Intent goTaskDetail=new Intent(MainActivity.this,TaskDetail.class);
-         goTaskDetail.putExtra("titile",title);
-         goTaskDetail.putExtra("disc",disc);
-         startActivity(goTaskDetail);
-    }
-});
-
- Button lab20=findViewById(R.id.task3);
- lab20.setOnClickListener(new View.OnClickListener() {
-     @Override
-     public void onClick(View v) {
-         String title="Solve lab20 Treeeee";
-         String disc="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries," +
-                 " but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised";
-         Intent goTaskDetaile=new Intent(MainActivity.this,TaskDetail.class);
-         goTaskDetaile.putExtra("titile",title);
-         goTaskDetaile.putExtra("disc",disc);
-
-         startActivity(goTaskDetaile);
-     }
- });
 
  Button setting=findViewById(R.id.settingsId);
  setting.setOnClickListener(new View.OnClickListener() {
