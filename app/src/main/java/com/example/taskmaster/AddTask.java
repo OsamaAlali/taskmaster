@@ -1,5 +1,6 @@
 package com.example.taskmaster;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
@@ -20,14 +21,50 @@ import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Team;
 import com.amplifyframework.datastore.generated.model.Todo;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
 public class AddTask extends AppCompatActivity {
     AppDatabase appDatabase;
+
+    String imgName="";
+
+    public void fileChoose(){
+        Intent fileChoose=new Intent(Intent.ACTION_GET_CONTENT);
+        fileChoose.setType("*/*");
+        fileChoose=Intent.createChooser(fileChoose,"choose file");
+        startActivityForResult(fileChoose,22);
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+        try {
+            InputStream exampleInputStream = getContentResolver().openInputStream(data.getData());
+
+            imgName = data.getData().toString();
+
+
+            Amplify.Storage.uploadInputStream(
+                    data.getData().toString(),
+                    exampleInputStream,
+                    result -> Log.i("MyAmplifyApp", "Successfully uploaded: " + result.getKey()),
+                    storageFailure -> Log.e("MyAmplifyApp", "Upload failed", storageFailure)
+            );
+        }  catch (FileNotFoundException error) {
+            Log.e("MyAmplifyApp", "Could not find file to open for input stream.", error);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
         setContentView(R.layout.activity_add_task);
         Button submitButton=findViewById(R.id.save);
@@ -41,14 +78,6 @@ public class AddTask extends AppCompatActivity {
         EditText statecGet=findViewById(R.id.stateId);
         String state=statecGet.getText().toString();
 
-
-//        try {
-//            Amplify.addPlugin(new AWSApiPlugin());
-//            Amplify.configure(getApplicationContext());
-//            Log.i("MyAmplifyApp", "Initialized Amplify");
-//        } catch (AmplifyException error) {
-//            Log.e("MyAmplifyApp", "Could not initialize Amplify", error);
-//        }
 
         Map< String,String> teamsList = new HashMap<>();
         Amplify.API.query(
@@ -97,15 +126,29 @@ public class AddTask extends AppCompatActivity {
             }
         });
 
-//        Button backMain=findViewById(R.id.backToMain);
-//        backMain.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent goMain=new Intent(AddTask.this,MainActivity.class);
-//                startActivity(goMain);
-//
-//            }
-//        });
-    }
+        Button backMain=findViewById(R.id.backToMain);
+        backMain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent goMain=new Intent(AddTask.this,MainActivity.class);
+                startActivity(goMain);
+
+            }
+        });
+
+        // buttom to uplode Image
+        Button uploadImg = findViewById(R.id.uploadImg);
+        uploadImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fileChoose();
+            }
+        });
+
+
+    }// On Create
+
+
+
 
 }
