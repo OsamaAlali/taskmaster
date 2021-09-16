@@ -35,6 +35,7 @@ import com.amplifyframework.auth.options.AuthSignOutOptions;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Team;
 import com.amplifyframework.datastore.generated.model.Todo;
+import com.amplifyframework.storage.s3.AWSS3StoragePlugin;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 
@@ -101,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
             // Add these lines to add the AWSApiPlugin plugins
             Amplify.addPlugin(new AWSApiPlugin());
             Amplify.addPlugin(new AWSCognitoAuthPlugin());
+            Amplify.addPlugin(new AWSS3StoragePlugin());
             Amplify.configure(getApplicationContext());
             getPinpointManager(getApplicationContext());
             Log.i("MyAmplifyApp", "Initialized Amplify");
@@ -219,7 +221,14 @@ addTaskBtn.setOnClickListener(new View.OnClickListener() {
      }
  });
 
-
+        Button detail=findViewById(R.id.taskDetail);
+        detail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intene=new Intent(MainActivity.this,TaskDetail.class);
+                startActivity(intene);
+            }
+        });
     }
 
     @Override

@@ -19,41 +19,16 @@
         app:layout_constraintVertical_bias="0.079" />
 
     <Button
-        android:id="@+id/task1"
+        android:id="@+id/taskDetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginLeft="28dp"
-        android:layout_marginTop="400dp"
-        android:text="lab10"
+        android:text="Deatail page"
         app:layout_constraintBottom_toTopOf="@+id/settingsId"
-        app:layout_constraintEnd_toStartOf="@+id/task2"
-        app:layout_constraintHorizontal_bias="0.361"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.628"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <Button
-        android:id="@+id/task2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="400dp"
-        android:layout_marginEnd="44dp"
-        android:layout_marginRight="44dp"
-        android:text="lab12"
-        app:layout_constraintEnd_toStartOf="@+id/task3"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/task3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="400dp"
-        android:layout_marginEnd="28dp"
-        android:layout_marginRight="28dp"
-        android:text="lab20"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintVertical_bias="0.903" />
 
     <Button
         android:id="@+id/settingsId"
@@ -73,7 +48,7 @@
         android:layout_height="45dp"
         android:layout_marginTop="36dp"
         android:text="My Task"
-        app:layout_constraintBottom_toTopOf="@+id/task1"
+        app:layout_constraintBottom_toTopOf="@+id/taskDetail"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.126"
         app:layout_constraintStart_toStartOf="parent"
