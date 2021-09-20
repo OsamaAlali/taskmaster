@@ -2,9 +2,13 @@ package com.example.taskmaster;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.room.Room;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.amplifyframework.AmplifyException;
 import com.amplifyframework.api.aws.AWSApiPlugin;
@@ -20,6 +25,9 @@ import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Team;
 import com.amplifyframework.datastore.generated.model.Todo;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -28,7 +36,7 @@ import java.util.Map;
 
 public class AddTask extends AppCompatActivity {
     AppDatabase appDatabase;
-
+    private FusedLocationProviderClient fusedLocationClient;
     String imgName="";
 
     public void fileChoose(){
@@ -64,7 +72,41 @@ public class AddTask extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            ActivityCompat.requestPermissions(this, new String[]{
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION}, 1234);
+
+            boolean x =ActivityCompat
+                    .checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) ==
+                    PackageManager.PERMISSION_GRANTED
+                    &&
+                    ActivityCompat
+                            .checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) ==
+                            PackageManager.PERMISSION_GRANTED;
+            // here to request the missing permissions, and then overriding
+            return;
+        }
+
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // Got last known location. In some rare situations this can be null.
+                        if (location != null) {
+                            // Logic to handle location object
+                            double longitude= location.getLongitude();
+                            double latitude= location.getLatitude();
+                            TextView tex1=findViewById(R.id.location);
+                            tex1.setText(" longitude"  +longitude + " latitude "+ latitude );
+                        }
+                    }
+
+                });
 
         setContentView(R.layout.activity_add_task);
         Button submitButton=findViewById(R.id.save);
@@ -77,6 +119,13 @@ public class AddTask extends AppCompatActivity {
 
         EditText statecGet=findViewById(R.id.stateId);
         String state=statecGet.getText().toString();
+
+        Intent intent = getIntent();
+        if (intent.getType() != null && intent.getType().equals("text/plain")){
+            EditText desc = findViewById(R.id.descrptionTaskId);
+            desc.setText(intent.getExtras().get(Intent.EXTRA_TEXT).toString());
+        }
+
 
 
         Map< String,String> teamsList = new HashMap<>();

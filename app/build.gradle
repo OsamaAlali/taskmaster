@@ -35,6 +35,8 @@ android {
 
 dependencies {
 
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
+
     def room_version = "2.3.0"
 
     implementation "androidx.room:room-runtime:$room_version"
@@ -90,6 +92,7 @@ dependencies {
     implementation ('com.amazonaws:aws-android-sdk-mobile-client:2.26.+@aar') { transitive = true }
 
     implementation 'com.amplifyframework:aws-storage-s3:1.24.0'
+    implementation "com.google.android.gms:play-services-location:15.0.1"
 }
 
 apply plugin: 'com.google.gms.google-services'
